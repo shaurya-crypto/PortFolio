@@ -90,6 +90,9 @@ export function createAudio() {
         const source = ctx.createBufferSource();
         source.buffer = buffer;
         source.loop = true;
+        if (buffer.duration > 0.5) {
+          source.loopEnd = buffer.duration - 0.5;
+        }
         ambientGain = ctx.createGain();
         ambientGain.gain.value = AUDIO.ambientVolume;
         source.connect(ambientGain).connect(master);
@@ -197,6 +200,11 @@ export function createAudio() {
     // Smooth volume ramp up to target
     if (s2Audio.volume < 0.8) {
       s2Audio.volume = Math.min(s2Audio.volume + 0.02, 0.8);
+    }
+
+    // Loop 0.5s early
+    if (s2Active && s2Audio.duration && s2Audio.currentTime >= s2Audio.duration - 1) {
+      s2Audio.currentTime = 0;
     }
   }
 

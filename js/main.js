@@ -22,6 +22,7 @@ import { createDebug } from "./ui/debug.js";
 import { createSoundControl, attachHoverBlips } from "./ui/sound.js";
 import { renderContent, renderBeats } from "./ui/content.js";
 import { createReveal } from "./ui/reveal.js";
+import { initMeteors } from "./ui/meteors.js";
 
 // Always start from the top on page load / refresh
 if (window.history.scrollRestoration) {
@@ -44,6 +45,9 @@ const portraitEl = document.getElementById("portrait-section");
 const portraitCanvas = document.getElementById("portrait-film");
 const portraitTitles = document.getElementById("portrait-titles");
 const portraitChapters = document.querySelectorAll(".portrait-chapter");
+
+// Initialize Meteors
+initMeteors("meteors-container", 30);
 
 // Static poster
 const poster = document.getElementById("poster");

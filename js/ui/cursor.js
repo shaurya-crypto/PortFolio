@@ -1,8 +1,3 @@
-/**
- * Custom cursor, desktop pointers only: a small dot that expands into a
- * labelled ring over interactive elements. Disabled on touch devices.
- */
-
 const INTERACTIVE = 'a, button, [data-cursor]';
 
 export function createCursor() {

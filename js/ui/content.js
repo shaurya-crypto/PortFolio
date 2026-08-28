@@ -31,13 +31,7 @@ function renderWork(root) {
     const row = stagger(el("li", "work-row"), index);
     row.id = `work-${index + 1}`;
 
-    const link = el(project.url ? "a" : "div", "work-link");
-    if (project.url) {
-      link.href = project.url;
-      link.target = "_blank";
-      link.rel = "noopener";
-      link.dataset.cursor = "VIEW";
-    }
+    const link = el("div", "work-link");
 
     const top = el("div", "work-top");
     top.append(el("span", "work-name", project.name));
@@ -46,6 +40,23 @@ function renderWork(root) {
     const meta = el("div", "work-meta");
     meta.append(el("span", "work-tech", project.technologies.join(", ")));
     meta.append(el("span", "work-status", `${project.role}, ${project.status.toLowerCase()}`));
+    
+    if (project.website) {
+      const siteLink = el("a", "work-action", "Live Site");
+      siteLink.href = project.website;
+      siteLink.target = "_blank";
+      siteLink.rel = "noopener";
+      siteLink.dataset.cursor = "VIEW";
+      meta.append(siteLink);
+    }
+    if (project.url) {
+      const gitLink = el("a", "work-action", "GitHub");
+      gitLink.href = project.url;
+      gitLink.target = "_blank";
+      gitLink.rel = "noopener";
+      gitLink.dataset.cursor = "VIEW";
+      meta.append(gitLink);
+    }
     link.append(top, desc, meta);
     row.append(link);
     list.append(row);
@@ -180,18 +191,11 @@ export function renderBeats(root) {
     beatEl.dataset.beat = id;
 
     const inner = el("div", "beat-inner");
-    if (id === "arrival") {
-      inner.append(el("p", "beat-kicker", portfolio.intro.kicker));
-      inner.append(el("p", "beat-name", portfolio.name));
-      inner.append(el("p", "beat-role", portfolio.role));
-      inner.append(el("p", "beat-line", portfolio.intro.statement));
-    } else {
-      inner.append(el("p", "beat-label", beat.label));
-      inner.append(el("p", "beat-title", beat.title));
-      if (beat.meta.length) {
-        const meta = el("p", "beat-meta", beat.meta.join("  /  "));
-        inner.append(meta);
-      }
+    if (beat.label) inner.append(el("p", "beat-label", beat.label));
+    inner.append(el("p", "beat-title", beat.title));
+    if (beat.meta && beat.meta.length) {
+      const meta = el("p", "beat-meta", beat.meta.join("  /  "));
+      inner.append(meta);
     }
     beatEl.append(inner);
     root.append(beatEl);

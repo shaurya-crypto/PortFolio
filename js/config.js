@@ -42,11 +42,9 @@ export const MAX_CANVAS_WIDTH = 2560;
  * with `fade` controlling the ramp width.
  */
 export const BEATS = [
-  { id: "arrival", start: 0.0, end: 0.14, fade: 0.05 },
-  { id: "practice", start: 0.18, end: 0.3, fade: 0.05 },
-  { id: "craft", start: 0.33, end: 0.43, fade: 0.05 },
-  { id: "work", start: 0.47, end: 0.57, fade: 0.05 },
-  { id: "portal", start: 0.84, end: 0.99, fade: 0.04 },
+  { id: "intro", start: 0.0, end: 0.25, fade: 0.05 },
+  { id: "dive", start: 0.35, end: 0.55, fade: 0.05 },
+  { id: "ready", start: 0.65, end: 0.75, fade: 0.05 },
 ];
 
 /** Film-chapter labels shown top-right while inside the journey. */

@@ -3,6 +3,7 @@
    One theme: near-black, warm off-white, one amber accent.
    One radius system: sharp. One accent, locked, everywhere.
    ============================================================ */
+@import url('https://api.fontshare.com/v2/css?f[]=Sharpie@400,600,800&display=swap');
 
 @font-face {
   font-family: "Geist";
@@ -39,7 +40,14 @@
 html { scroll-behavior: auto; }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    radial-gradient(100% 100% at 30% 10%, transparent 60%, rgba(200, 10, 40, 0.12) 100%),
+    radial-gradient(100% 100% at 70% 10%, transparent 60%, rgba(10, 40, 180, 0.15) 100%);
+  background-size: 4rem 3rem, 4rem 3rem, 100% 100%, 100% 100%;
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--sans);
   font-weight: 340;
@@ -205,19 +213,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: absolute;
   inset: 0;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .beat {
   position: absolute;
-  left: var(--gutter);
-  bottom: 16vh;
-  max-width: min(46ch, 42vw);
+  text-align: center;
+  width: 100%;
+  max-width: 80vw;
   visibility: hidden;
   opacity: 0;
   will-change: transform, opacity, filter;
 }
 
-.beat-inner { text-shadow: 0 1px 22px rgba(10, 9, 8, 0.55); }
+.beat-inner { 
+  display: inline-block;
+  padding: 1.5rem 2.5rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-shadow: 0 1px 22px rgba(10, 9, 8, 0.55); 
+}
 
 .beat-kicker,
 .beat-label {
@@ -246,11 +265,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .beat-line,
 .beat-title {
-  font-size: clamp(1.05rem, 1.7vw, 1.45rem);
-  font-weight: 300;
-  line-height: 1.45;
-  color: var(--muted);
-  max-width: 34ch;
+  font-family: 'Panchang', var(--sans);
+  font-size: clamp(1.2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .beat-meta {
@@ -465,7 +486,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- section 2 : portrait sequence ---------- */
 
 #portrait-section {
-  height: 600vh;
+  height: 900vh;
   position: relative;
   background: #000;
   z-index: 10;
@@ -609,7 +630,21 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---------- section 3 : the digital world ---------- */
 
-#world { position: relative; background: var(--bg); }
+#world {
+  position: relative;
+  background: transparent;
+}
+#world::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  background: linear-gradient(to bottom, #000, transparent);
+  pointer-events: none;
+  z-index: -1;
+}
 
 .panel {
   max-width: 1200px;
@@ -656,8 +691,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* work */
 
-a.work-link { cursor: pointer; }
-.work-link:focus-visible { outline-offset: 8px; }
+a.work-action { 
+  cursor: pointer; 
+  color: var(--ink); 
+  text-decoration: underline; 
+  text-decoration-color: var(--faint);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s;
+}
+a.work-action:hover {
+  text-decoration-color: var(--accent);
+}
+.work-action:focus-visible { outline-offset: 8px; }
 
 .work-list { list-style: none; }
 .work-row { border-top: 1px solid var(--hairline); }
@@ -667,8 +712,8 @@ a.work-link { cursor: pointer; }
   padding: 2.2rem 0;
   transition: padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-a.work-link:hover { padding-left: 1.2rem; }
-a.work-link:hover .work-name { color: var(--accent); }
+.work-link:hover { padding-left: 1.2rem; }
+.work-link:hover .work-name { color: var(--accent); }
 
 .work-top {
   display: flex;
@@ -1009,4 +1054,40 @@ img, canvas, video {
 
 .footer-links a:hover {
   opacity: 1;
+}
+
+/* ── Meteors ────────────────────────────────────────── */
+#meteors-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: #64748b;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transform: rotate(215deg);
+  animation: meteor linear infinite;
+}
+
+.meteor::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, #64748b, transparent);
+}
+
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(215deg) translateX(-1500px); opacity: 0; }
 }

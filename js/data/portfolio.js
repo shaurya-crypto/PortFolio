@@ -14,29 +14,19 @@ export const portfolio = {
 
   /** Narrative beats rendered over the journey. Order matches BEATS ids in config.js. */
   beats: {
-    arrival: {
-      label: "ARRIVAL",
-      title: "Everything I make starts here, at a desk in a quiet house.",
-      meta: ["NIGHT", "EXTERIOR"],
+    intro: {
+      label: "",
+      title: "I'M SHAURYA",
+      meta: [],
     },
-    practice: {
-      label: "PRACTICE",
-      title: "Software, AI systems, and the hardware they run on.",
-      meta: ["BUILD", "SHIP", "REPEAT"],
+    dive: {
+      label: "",
+      title: "LET'S DIVE INSIDE MY WORLD",
+      meta: [],
     },
-    craft: {
-      label: "CRAFT",
-      title: "Python and TypeScript. Models and microcontrollers. Screens and circuits.",
-      meta: ["SOFTWARE", "AI", "HARDWARE"],
-    },
-    work: {
-      label: "SELECTED WORK",
-      title: "The door is open. Come see what got built.",
-      meta: ["2023", "2026"],
-    },
-    portal: {
-      label: "THE PORTAL",
-      title: "Enter my digital world.",
+    ready: {
+      label: "",
+      title: "ARE YOU READY ?? LET'S GO!!",
       meta: [],
     },
   },
@@ -59,48 +49,51 @@ export const portfolio = {
 
   projects: [
     {
-      name: "Sentinel",
-      description: "Local-first security monitor that watches network traffic on a home lab and flags anomalies with an on-device model. No cloud, no data leaving the house.",
-      technologies: ["Python", "scikit-learn", "ESP32"],
-      status: "Shipping",
+      name: "Stratum Studio",
+      description: "An AI first IDE to code between multiples microcontrollers with AI. Mobile users often can't code on their microcontrollers don't worry, I have built for mobiles also",
+      technologies: ["Python", "node.js", "ESP32", "Arduino", "Web-App"],
+      status: "Beta",
       year: "2026",
       role: "Design & engineering",
-      url: "https://github.com/shaurya",
+      url: "https://github.com/shaurya-crypto/Stratumstudio",
+      website: "http://stratum-studio.vercel.app",
     },
     {
-      name: "Ledgerline",
+      name: "Aanya AI",
       description: "Personal finance ledger with double-entry bookkeeping behind a plain interface. Imports bank exports, keeps everything in one SQLite file.",
-      technologies: ["TypeScript", "React", "Node.js"],
-      status: "Live",
+      technologies: ["TypeScript", "React", "Node.js", "Python"],
+      status: "Archived(may not work backend)",
       year: "2025",
-      role: "Design & engineering",
-      url: "https://github.com/shaurya",
+      role: "AI & engineering",
+      url: "https://github.com/shaurya-crypto/aanya-application",
+      website: "https://aanyaai.dpdns.org/",
     },
     {
-      name: "Hearth Display",
-      description: "A wall-mounted e-ink dashboard built around an ESP32: weather, calendar, and transit times, running for months on a single charge.",
-      technologies: ["ESP32", "C++", "Electronics"],
-      status: "Prototype",
+      name: "PicoGamepad",
+      description: "Built an GamePad using Pi Pico W with dual mode Wifi & Bluetooth, I lack of gamepad's so I built my own",
+      technologies: ["ESP32", "Electronics", "Pi Pico"],
+      status: "Prototype/personal",
       year: "2025",
       role: "Hardware & firmware",
-      url: "https://github.com/shaurya",
+      url: "https://github.com/shaurya-crypto/PicoGamepad",
     },
     {
-      name: "Fieldnotes",
+      name: "My PortFolio",
       description: "A markdown notebook that syncs over the local network. Written to learn how conflict-free replicated data types behave under real edits.",
-      technologies: ["TypeScript", "CRDTs", "Node.js"],
-      status: "Experimental",
-      year: "2024",
+      technologies: ["HTML", "TailwindCSS", "JS"],
+      status: "Personal",
+      year: "2026",
       role: "Design & engineering",
-      url: "https://github.com/shaurya",
+      url: "https://github.com/shaurya-crypto/portfolio",
+      website: "https://shaurya-prabhakar.vercel.app",
     },
   ],
 
   skills: [
-    { group: "Programming", items: ["Python", "TypeScript", "JavaScript", "C++"] },
-    { group: "AI / ML", items: ["NumPy", "scikit-learn", "PyTorch", "Model deployment"] },
-    { group: "Web", items: ["React", "Next.js", "Node.js", "SQLite"] },
-    { group: "Hardware", items: ["ESP32", "Microcontrollers", "Electronics", "Firmware"] },
+    { group: "Programming", items: ["Python", "JavaScript"] },
+    { group: "AI / ML", items: ["NumPy", "scikit-learn(learning)", "PyTorch(learning)", "Model deployment(learning)"] },
+    { group: "Web", items: ["React", "Node.js", "MongoDB"] },
+    { group: "Hardware", items: ["ESP32", "Microcontrollers", "Electronics", "Firmware", "Pi Pico"] },
   ],
 
   achievements: [
@@ -111,18 +104,19 @@ export const portfolio = {
   ],
 
   goals: [
-    "Take a hardware product from one-off prototype to a small production run.",
+    "Make StuChats a successful project and startup.",
     "Train and deploy a model that runs entirely on a microcontroller.",
-    "Write about the builds properly: the failures, not just the highlight reel.",
+    "Learn LLM's, AI agents, agentic AI, Gen AI, Neural Networks.",
+    "Keep building projects, startups, turning ideas to reality.",
   ],
 
   contact: {
     heading: "Let's build something.",
-    body: "The desk is warm and the ideas queue is long. If you have a project that mixes code and circuits, or just want to talk shop, write to me.",
+    body: "Feel free to reach out. If you have a project that mixes code and circuits, or just want to talk, write to me.",
     links: [
-      { label: "Email", value: "hello@shaurya.dev", url: "mailto:hello@shaurya.dev" },
-      { label: "GitHub", value: "github.com/shaurya", url: "https://github.com/shaurya" },
-      { label: "LinkedIn", value: "linkedin.com/in/shaurya", url: "https://www.linkedin.com/in/shaurya" },
+      { label: "Email", value: "shauryaprabhakar097@gmail.com", url: "mailto:shauryprabhakar097@gmail.com" },
+      { label: "GitHub", value: "github.com/shaurya-crypto", url: "https://github.com/shaurya-crypto" },
+      { label: "LinkedIn", value: "linkedin.com/in/shaurya-prabhakar", url: "https://www.linkedin.com/in/shaurya-prabhakar" },
     ],
   },
 };
