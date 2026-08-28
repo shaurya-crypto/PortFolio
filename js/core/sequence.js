@@ -13,13 +13,14 @@
 
 import { SEQUENCE, JOURNEY, MAX_DPR, MAX_CANVAS_WIDTH } from "../config.js";
 
-export function frameSrc(index) {
-  const n = String(index + 1).padStart(SEQUENCE.padding, "0");
-  return `${SEQUENCE.path}frame-${n}.${SEQUENCE.extension}`;
+export function frameSrc(index, config = SEQUENCE) {
+  const n = String(index + 1).padStart(config.padding, "0");
+  const prefix = config.prefix || "frame-";
+  return `${config.path}${prefix}${n}.${config.extension}`;
 }
 
-export function createSequence() {
-  const frames = new Array(SEQUENCE.frameCount).fill(null);
+export function createSequence(config = SEQUENCE) {
+  const frames = new Array(config.frameCount).fill(null);
   const listeners = new Set();
   let loadedCount = 0;
   let started = false;
@@ -40,12 +41,10 @@ export function createSequence() {
         resolve(img);
       };
       img.onerror = () => {
-        // Missing frame: leave the slot null. The renderer picks the
-        // nearest loaded frame, the page never breaks on a 404.
-        console.warn(`[sequence] frame ${index + 1} failed to load`);
+        console.warn(`[sequence] frame ${index + 1} failed to load from ${config.path}`);
         resolve(null);
       };
-      img.src = frameSrc(index);
+      img.src = frameSrc(index, config);
       if (priorityQueue) img.fetchPriority = "high";
     });
   }
@@ -59,9 +58,9 @@ export function createSequence() {
   async function loadBackground() {
     let next = JOURNEY.bootstrapFrames + 1;
     const workers = Array.from(
-      { length: Math.min(JOURNEY.backgroundConcurrency, Math.max(1, SEQUENCE.frameCount - next + 1)) },
+      { length: Math.min(JOURNEY.backgroundConcurrency, Math.max(1, config.frameCount - next + 1)) },
       async () => {
-        while (next <= SEQUENCE.frameCount) {
+        while (next <= config.frameCount) {
           const current = next;
           next += 1;
           await load(current);
@@ -74,27 +73,20 @@ export function createSequence() {
   function start() {
     if (started) return Promise.resolve();
     started = true;
-    // 1) poster, 2) neighbours the visitor sees first.
-    return loadRange(0, JOURNEY.bootstrapFrames, true);
+    return loadRange(0, Math.min(JOURNEY.bootstrapFrames, config.frameCount - 1), true);
   }
 
   return {
     start,
     loadBackground,
-    get frameCount() {
-      return SEQUENCE.frameCount;
-    },
-    get loadedCount() {
-      return loadedCount;
-    },
-    get(index) {
-      return frames[index];
-    },
+    get frameCount() { return config.frameCount; },
+    get loadedCount() { return loadedCount; },
+    get(index) { return frames[index]; },
     nearestLoaded(index) {
       if (frames[index]) return index;
-      for (let d = 1; d < SEQUENCE.frameCount; d += 1) {
+      for (let d = 1; d < config.frameCount; d += 1) {
         if (index - d >= 0 && frames[index - d]) return index - d;
-        if (index + d < SEQUENCE.frameCount && frames[index + d]) return index + d;
+        if (index + d < config.frameCount && frames[index + d]) return index + d;
       }
       return -1;
     },
@@ -120,7 +112,7 @@ export function createRenderer(canvas, sequence) {
     canvas.height = Math.round(cssHeight * dpr * scale);
     canvas.style.width = cssWidth + "px";
     canvas.style.height = cssHeight + "px";
-    currentFrame = -1; // force redraw
+    currentFrame = -1; 
   }
 
   function draw(index) {
@@ -129,7 +121,6 @@ export function createRenderer(canvas, sequence) {
     const img = sequence.get(resolved);
     if (!img) return;
 
-    // Cover-fit the 16:9 frame inside the canvas, centered crop.
     const cw = canvas.width;
     const chh = canvas.height;
     const scale = Math.max(cw / img.naturalWidth, chh / img.naturalHeight);
@@ -142,11 +133,5 @@ export function createRenderer(canvas, sequence) {
     currentFrame = resolved;
   }
 
-  return {
-    resize,
-    draw,
-    get currentFrame() {
-      return currentFrame;
-    },
-  };
+  return { resize, draw, get currentFrame() { return currentFrame; } };
 }

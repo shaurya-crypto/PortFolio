@@ -10,7 +10,7 @@
  * directly.
  */
 
-import { JOURNEY, SEQUENCE } from "./config.js";
+import { JOURNEY, SEQUENCE, PORTRAIT_SEQUENCE } from "./config.js";
 import { createCamera, journeyProgress, prefersReducedMotion } from "./core/scroll.js";
 import { createSequence, createRenderer } from "./core/sequence.js";
 import { createChoreography } from "./core/choreo.js";
@@ -39,19 +39,30 @@ const canvas = document.getElementById("film");
 const beatLayer = document.getElementById("beats");
 const indicator = document.getElementById("scroll-indicator");
 
-// Static poster shown until the first frames decode (and as the
-// reduced-motion hero). Same cover-fit math as the canvas.
+// Section 2: Portrait
+const portraitEl = document.getElementById("portrait-section");
+const portraitCanvas = document.getElementById("portrait-film");
+const portraitTitles = document.getElementById("portrait-titles");
+const portraitChapters = document.querySelectorAll(".portrait-chapter");
+
+// Static poster
 const poster = document.getElementById("poster");
 const posterImg = new Image();
 posterImg.src = `${SEQUENCE.path}frame-${String(JOURNEY.posterFrame).padStart(SEQUENCE.padding, "0")}.${SEQUENCE.extension}`;
 posterImg.onload = () => poster.appendChild(posterImg);
 
-// Section 2 content and journey beats, all from the data file.
+// World
 renderContent(document.getElementById("world"));
 renderBeats(beatLayer);
 
-const sequence = createSequence();
+// First Sequence
+const sequence = createSequence(SEQUENCE);
 const renderer = createRenderer(canvas, sequence);
+
+// Second Sequence
+const pSequence = createSequence(PORTRAIT_SEQUENCE);
+const pRenderer = createRenderer(portraitCanvas, pSequence);
+
 const reduced = prefersReducedMotion();
 const choreography = createChoreography({
   stage: stageEl,
@@ -75,12 +86,11 @@ document.addEventListener("click", (e) => {
   document.body.appendChild(ripple);
   ripple.addEventListener("animationend", () => ripple.remove());
 });
-
-// Disable right-click context menu
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 
 function resize() {
   renderer.resize();
+  pRenderer.resize();
 }
 window.addEventListener("resize", resize, { passive: true });
 resize();
@@ -88,53 +98,138 @@ resize();
 // The single render heartbeat.
 const camera = createCamera();
 let indicatorHidden = false;
+let hasPlayedTurnStart = false;
 
 camera.onChange((smoothY, velocity) => {
-  const progress = journeyProgress(smoothY, journeyEl);
-  const frameIndex = Math.min(
+  // --- Section 1: House Sequence ---
+  const progress1 = journeyProgress(smoothY, journeyEl);
+  const frameIndex1 = Math.min(
     sequence.frameCount - 1,
-    Math.floor(progress * (sequence.frameCount - 1)),
+    Math.floor(progress1 * (sequence.frameCount - 1)),
   );
 
   if (!reduced) {
-    renderer.draw(frameIndex);
-
-    // Camera depth: a slow dolly-in across the journey plus a small
-    // velocity drift, so the film plane feels like it moves in 3D.
-    const dolly = 1 + 0.05 * progress;
+    renderer.draw(frameIndex1);
+    const dolly = 1 + 0.05 * progress1;
     const drift = Math.max(-8, Math.min(8, velocity * 0.05));
     canvas.style.transform = `translate3d(0, ${drift.toFixed(2)}px, 0) scale(${dolly.toFixed(4)})`;
   }
-  choreography.apply(progress);
+  choreography.apply(progress1);
 
   const inJourney = smoothY < journeyEl.offsetTop + journeyEl.offsetHeight - window.innerHeight;
-  const targetFrame = Math.max(1, Math.min(SEQUENCE.frameCount, Math.ceil(progress * SEQUENCE.frameCount)));
-  renderer.draw(targetFrame);
-  if (audio) audio.updateCues(targetFrame);
-  choreography.applyChapter(progress, inJourney, chapters.renderChapter);
+  const targetFrame1 = Math.max(1, Math.min(SEQUENCE.frameCount, Math.ceil(progress1 * SEQUENCE.frameCount)));
+  renderer.draw(targetFrame1);
+  if (audio) audio.updateCues(targetFrame1);
+  choreography.applyChapter(progress1, inJourney, chapters.renderChapter);
+
+  // --- Section 2: Portrait Sequence ---
+  const progress2 = journeyProgress(smoothY, portraitEl);
+  if (progress2 >= 0 && progress2 <= 1) {
+    const frameIndex2 = Math.min(
+      pSequence.frameCount - 1,
+      Math.floor(progress2 * (pSequence.frameCount - 1)),
+    );
+
+    if (!reduced) {
+      pRenderer.draw(frameIndex2);
+    }
+    
+    // Animate WHO'S THERE?
+    // Fades in early, fades out as turning begins.
+    let titleOpacity = 0;
+    let titleY = 30;
+    if (progress2 < 0.05) {
+      const p = progress2 / 0.05;
+      titleOpacity = p;
+      titleY = 30 - 30 * p;
+    } else if (progress2 < 0.15) {
+      titleOpacity = 1;
+      titleY = 0;
+    } else if (progress2 < 0.25) {
+      const p = (progress2 - 0.15) / 0.10;
+      titleOpacity = 1 - p;
+      titleY = -30 * p;
+    }
+    
+    if (reduced) {
+      portraitTitles.style.opacity = progress2 < 0.25 ? 1 : 0;
+      portraitTitles.style.transform = `none`;
+    } else {
+      portraitTitles.style.opacity = titleOpacity.toFixed(2);
+      portraitTitles.style.transform = `translateY(${titleY.toFixed(1)}px)`;
+    }
+
+    // Chapters 1 to 6 animations (distributed from 0.3 to 0.95)
+    portraitChapters.forEach((chap, i) => {
+      const start = 0.3 + i * 0.11;
+      const end = start + 0.05;
+      const fadeOutStart = end + 0.06;
+      const fadeOutEnd = fadeOutStart + 0.03;
+      
+      let opacity = 0;
+      let y = 20;
+
+      if (progress2 >= start && progress2 <= end) {
+        const p = (progress2 - start) / (end - start);
+        opacity = p;
+        y = 20 - 20 * p;
+      } else if (progress2 > end && progress2 <= fadeOutStart) {
+        opacity = 1;
+        y = 0;
+      } else if (progress2 > fadeOutStart && progress2 <= fadeOutEnd) {
+        const p = (progress2 - fadeOutStart) / (fadeOutEnd - fadeOutStart);
+        opacity = 1 - p;
+        y = -20 * p;
+      }
+      
+      // Final chapter stays pinned at the end
+      if (i === 5 && progress2 > fadeOutStart) {
+        opacity = 1;
+        y = 0;
+      }
+      
+      if (reduced) {
+        chap.style.opacity = (progress2 >= start && (i === 5 || progress2 <= fadeOutStart)) ? 1 : 0;
+        chap.style.transform = `none`;
+      } else {
+        chap.style.opacity = opacity.toFixed(2);
+        chap.style.transform = `translateY(${y.toFixed(1)}px)`;
+      }
+    });
+
+    // Example audio hook for turning
+    if (progress2 > 0.15 && !hasPlayedTurnStart && audio) {
+      hasPlayedTurnStart = true;
+      audio.blip("hover"); // Placeholder until fonk is added
+    } else if (progress2 < 0.10) {
+      hasPlayedTurnStart = false;
+    }
+  }
 
   if (!indicatorHidden) {
-    const showIndicator = progress < 0.015 && smoothY < 40;
+    const showIndicator = progress1 < 0.015 && smoothY < 40;
     indicator.classList.toggle("is-hidden", !showIndicator);
     if (!showIndicator) indicatorHidden = true;
   }
 
-  if (debug) debug.update({ progress, frame: frameIndex, loaded: sequence.loadedCount });
+  if (debug) debug.update({ progress: progress1, frame: frameIndex1, loaded: sequence.loadedCount });
 });
 
-// Progressive loading: bootstrap frames gate the loader, the rest
-// trickle in behind the experience.
+// Progressive loading
 sequence.start().then(() => {
   renderer.draw(0);
   if (!reduced) {
-    // Composite the poster into the canvas so the handoff is invisible.
     poster.classList.add("is-dimmed");
   } else {
     canvas.classList.add("is-hidden");
   }
   document.body.classList.add("is-ready");
   loader.dismiss();
-  sequence.loadBackground();
+  
+  // Load background for section 1, then queue section 2
+  sequence.loadBackground().then(() => {
+    pSequence.start().then(() => pSequence.loadBackground());
+  });
 });
 
 sequence.onProgress(() => {

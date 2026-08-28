@@ -9,6 +9,15 @@ export const SEQUENCE = {
   frameCount: 240,
   extension: "jpg",
   padding: 4,
+  prefix: "frame-"
+};
+
+export const PORTRAIT_SEQUENCE = {
+  path: "assets/sequences/section2/",
+  frameCount: 153,
+  extension: "jpg",
+  padding: 3,
+  prefix: "ezgif-frame-"
 };
 
 /** Scroll length of the cinematic journey, in viewport heights. */

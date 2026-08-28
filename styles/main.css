@@ -462,7 +462,152 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: transform 0.3s ease;
 }
 
-/* ---------- section 2 : the digital world ---------- */
+/* ---------- section 2 : portrait sequence ---------- */
+
+#portrait-section {
+  height: 600vh;
+  position: relative;
+  background: #000;
+  z-index: 10;
+}
+
+#portrait-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #050505;
+}
+
+#portrait-film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+#portrait-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#portrait-titles {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity, filter;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+#portrait-main-title {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(4rem, 12vw, 9rem);
+  letter-spacing: 0.05em;
+  color: #fff;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.8);
+}
+
+#portrait-sub-title {
+  font-family: var(--mono);
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-top: 1rem;
+  text-transform: uppercase;
+}
+
+#portrait-story {
+  position: absolute;
+  left: max(7vw, var(--gutter));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  max-width: 48ch;
+}
+
+.portrait-chapter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
+
+.p-chap-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  margin-bottom: 1.2rem;
+}
+
+.p-chap-main {
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-weight: 320;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #ece7dd;
+  margin-bottom: 1rem;
+}
+
+.p-chap-sub {
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 340;
+  color: rgba(236, 231, 221, 0.6);
+  line-height: 1.5;
+}
+
+.p-chap-tech {
+  margin-top: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: rgba(236, 231, 221, 0.4);
+}
+
+.p-chap-name {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 0.8rem;
+}
+
+.p-chap-title {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.p-chap-footer {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* ---------- section 3 : the digital world ---------- */
 
 #world { position: relative; background: var(--bg); }
 
@@ -726,10 +871,13 @@ a.work-link:hover .work-name { color: var(--accent); }
 /* ---------- responsive ---------- */
 
 @media (max-width: 768px) {
+  :root {
+    --gutter: 1.5rem;
+  }
   .beat {
     left: var(--gutter);
     right: var(--gutter);
-    bottom: 11vh;
+    bottom: 14vh;
     max-width: none;
   }
   .beat-line, .beat-title { font-size: 1rem; }
@@ -740,6 +888,20 @@ a.work-link:hover .work-name { color: var(--accent); }
   .about-row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.6rem 0; }
   .scroll-indicator { bottom: 1.3rem; }
   .statement { min-height: 70vh; }
+}
+
+@media (max-width: 480px) {
+  .gate-actions { flex-direction: column; width: 100%; max-width: 240px; }
+  .gate-button { width: 100%; text-align: center; }
+  .index-menu ol { padding-left: var(--gutter); }
+  .index-menu a { font-size: 2.2rem; }
+  .contact-link { flex-direction: column; gap: 0.5rem; }
+  .panel { padding: 5rem var(--gutter); }
+  .work-name { font-size: 1.6rem; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursor { display: none !important; }
 }
 
 /* ---------- reduced motion ---------- */

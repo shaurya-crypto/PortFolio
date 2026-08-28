@@ -34,6 +34,9 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/sequences/house/frame-0001.jpg" as="image" />
   <link rel="stylesheet" href="styles/main.css" />
   <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
@@ -69,6 +72,7 @@
   <nav id="index-menu" class="index-menu" aria-label="Sections">
     <ol>
       <li><a href="#inside">Inside</a></li>
+      <li><a href="#portrait-section">The Builder</a></li>
       <li><a href="#work">Selected Work</a></li>
       <li><a href="#capabilities">Capabilities</a></li>
       <li><a href="#evidence">Evidence</a></li>
@@ -87,6 +91,55 @@
         <div id="black-edge" aria-hidden="true"></div>
       </div>
     </section>
+
+    <section id="portrait-section" aria-label="Cinematic Portrait">
+      <div id="portrait-stage">
+        <canvas id="portrait-film" aria-hidden="true"></canvas>
+        
+        <div id="portrait-overlay">
+          <div id="portrait-titles">
+            <h2 id="portrait-main-title">WHO'S THERE?</h2>
+            <h3 id="portrait-sub-title">lets see!!</h3>
+          </div>
+          
+          <div id="portrait-story">
+            <div class="portrait-chapter" data-chapter="1">
+              <span class="p-chap-label">01 — THE BEGINNING</span>
+              <p class="p-chap-main">I started building with code when I was around twelve.</p>
+              <p class="p-chap-sub">What began as curiosity became a daily habit of learning, experimenting and making things that actually work.</p>
+            </div>
+            <div class="portrait-chapter" data-chapter="2">
+              <span class="p-chap-label">02 — EXPANDING THE CRAFT</span>
+              <p class="p-chap-main">Programming was only the beginning.</p>
+              <p class="p-chap-sub">Over time, my curiosity expanded from software into electronics, microcontrollers, hardware and the systems connecting them.</p>
+              <p class="p-chap-tech">Python · JavaScript · HTML · CSS · Microcontrollers · AI</p>
+            </div>
+            <div class="portrait-chapter" data-chapter="3">
+              <span class="p-chap-label">03 — TOWARD INTELLIGENCE</span>
+              <p class="p-chap-main">Then my focus moved deeper into AI.</p>
+              <p class="p-chap-sub">I began exploring machine learning, neural networks, transformers, embeddings, retrieval systems and the foundations behind modern AI.</p>
+            </div>
+            <div class="portrait-chapter" data-chapter="4">
+              <span class="p-chap-label">04 — BUILDING IN PUBLIC</span>
+              <p class="p-chap-main">I learn by building.</p>
+              <p class="p-chap-sub">Projects became experiments. Experiments became products. Every iteration taught me something the previous one couldn't.</p>
+            </div>
+            <div class="portrait-chapter" data-chapter="5">
+              <span class="p-chap-label">05 — RIGHT NOW</span>
+              <p class="p-chap-main">Today, I'm building at the intersection of software, hardware and AI.</p>
+              <p class="p-chap-sub">I'm currently building StuChats and working on Stratum Studios, while continuing to explore AI, electronics, product design and new ways to turn ideas into real systems.</p>
+            </div>
+            <div class="portrait-chapter final-chapter" data-chapter="6">
+              <span class="p-chap-label">06 — PRESENT</span>
+              <p class="p-chap-name">SHAURYA PRABHAKAR</p>
+              <p class="p-chap-title">Builder · Founder · Technologist</p>
+              <p class="p-chap-footer">Learning continuously. Building relentlessly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div id="world"></div>
   </main>
 

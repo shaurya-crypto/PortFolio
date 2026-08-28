@@ -56,9 +56,13 @@ export function createSoundControl({ audio }) {
 
 /** Wires hover and click blips to interactive elements once sound is enabled. */
 export function attachHoverBlips(audio) {
-  document.addEventListener("pointerover", (event) => {
-    if (event.target.closest("a, button")) audio.blip("hover");
-  }, { passive: true });
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  
+  if (canHover) {
+    document.addEventListener("pointerover", (event) => {
+      if (event.target.closest("a, button")) audio.blip("hover");
+    }, { passive: true });
+  }
   
   document.addEventListener("click", () => {
     audio.blip("click");
