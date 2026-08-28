@@ -124,6 +124,10 @@ camera.onChange((smoothY, velocity) => {
 
   // --- Section 2: Portrait Sequence ---
   const progress2 = journeyProgress(smoothY, portraitEl);
+  
+  // Start section 2 song early (last 3 frames of section 1 = ~0.987)
+  if (audio) audio.updateSection2Audio(progress2, progress1);
+
   if (progress2 >= 0 && progress2 <= 1) {
     const frameIndex2 = Math.min(
       pSequence.frameCount - 1,
@@ -133,9 +137,7 @@ camera.onChange((smoothY, velocity) => {
     if (!reduced) {
       pRenderer.draw(frameIndex2);
     }
-    
-    // Animate WHO'S THERE?
-    // Fades in early, fades out as turning begins.
+
     let titleOpacity = 0;
     let titleY = 30;
     if (progress2 < 0.05) {

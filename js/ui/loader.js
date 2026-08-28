@@ -18,8 +18,8 @@ export function createLoader() {
   function tick() {
     if (dismissed) return;
     const elapsed = Date.now() - startTime;
-    // Force a 3 second minimum duration for the cinematic feel
-    const timePct = Math.min(100, (elapsed / 3000) * 100);
+    // Force a 2 second minimum duration for the cinematic feel
+    const timePct = Math.min(100, (elapsed / 2000) * 100);
     
     // The displayed percent is the minimum of how much time has passed and how much is actually loaded
     const displayPct = Math.min(timePct, targetPct);
