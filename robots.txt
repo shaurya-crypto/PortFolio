@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shaurya-prabhakar.vercel.app/sitemap.xml
